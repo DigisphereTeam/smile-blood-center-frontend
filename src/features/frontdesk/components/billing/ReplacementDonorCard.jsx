@@ -1,4 +1,4 @@
-import { MenuItem, Stack, Switch, Typography } from "@mui/material";
+import { Stack, Switch, Typography } from "@mui/material";
 
 import AppCard from "../../../../components/common/AppCard";
 import AppSelect from "../../../../components/common/AppSelect";
@@ -39,13 +39,8 @@ const ReplacementDonorCard = ({
           value={donorCount}
           onChange={onDonorCountChange}
           disabled={!hasReplacement}
-        >
-          {[1, 2, 3, 4, 5].map((count) => (
-            <MenuItem key={count} value={count}>
-              {count}
-            </MenuItem>
-          ))}
-        </AppSelect>
+          options={[1, 2, 3, 4, 5]}
+        />
       </Stack>
     </AppCard>
   );

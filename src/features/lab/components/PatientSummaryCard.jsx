@@ -8,6 +8,7 @@ import {
 
 import AppCard from "../../../components/common/AppCard";
 import StatusChip from "../../../components/common/StatusChip";
+import BloodGroupCard from "../../../components/common/BloodGroupCard";
 
 const formatComponent = (component) => {
   if (!component) return "-";
@@ -68,17 +69,19 @@ const PatientSummaryCard = ({ patient }) => {
         {/* Content */}
         <Grid container spacing={4}>
           {/* Blood Group */}
-          <Grid size={{ xs: 12, md: 2 }}>
+          <Grid
+            size={{ xs: 12, md: 2 }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <Label>PATIENT BLOOD GROUP</Label>
 
-            <Typography
-              variant="h1"
-              color="secondary.main"
-              fontWeight={700}
-              mt={1}
-            >
-              {patient.bloodGroup}
-            </Typography>
+            <Box mt={2}>
+              <BloodGroupCard bloodGroup={patient.bloodGroup} size={80} />
+            </Box>
           </Grid>
 
           {/* Right Side */}

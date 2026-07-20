@@ -43,11 +43,10 @@ const LabProcessingPage = () => {
   );
 
   setSelectedPatient(latestPatient);
-  };
-  
+};
   const queuePatients = patients.filter(
-  (patient) => patient.status !== REQUISITION_STATUS.COMPLETED
-);
+    (patient) => patient.status !== REQUISITION_STATUS.COMPLETED,
+  );
 
   return (
     <>

@@ -11,23 +11,46 @@ import DonorDetailsForm from "./DonorDetailsForm";
 import CrossMatchingForm from "./CrossMatchingForm";
 
 import { getInitialLabFormData } from "../../../utils/labFormData";
+
 import {
   COMPATIBILITY_STATUS,
   REQUISITION_STATUS,
 } from "../../../constants/statusConstants";
 
-const steps = ["Blood Grouping", "Donor Details", "Cross Matching"];
+import {
+  saveCompatibilityReport,
+  getCompatibilityReportByRequisitionId,
+} from "../../storage/compatibilityStorageApi";
 
-const LabProcessingCard = ({ patient, onSubmit }) => {
-  const [activeStep, setActiveStep] = useState(0);
+import { getDonors } from "../../storage/donorStorageApi";
 
-  const [formData, setFormData] = useState(getInitialLabFormData(patient));
+const steps = [
+  "Blood Grouping",
+  "Donor Details",
+  "Cross Matching",
+];
+
+const LabProcessingCard = ({
+  patient,
+  onSubmit,
+}) => {
+  const [activeStep, setActiveStep] =
+    useState(0);
+
+  const [formData, setFormData] = useState(
+    getInitialLabFormData(patient)
+  );
 
   useEffect(() => {
     if (!patient) return;
 
-    setActiveStep(patient.lab?.currentStep ?? 0);
-    setFormData(getInitialLabFormData(patient));
+    setActiveStep(
+      patient.lab?.currentStep ?? 0
+    );
+
+    setFormData(
+      getInitialLabFormData(patient)
+    );
   }, [patient]);
 
   const handleChange = (field, value) => {
@@ -40,7 +63,10 @@ const LabProcessingCard = ({ patient, onSubmit }) => {
   const validateCurrentStep = () => {
     switch (activeStep) {
       case 0:
-        return formData.confirmedABOGroup && formData.confirmedRhType;
+        return (
+          formData.confirmedABOGroup &&
+          formData.confirmedRhType
+        );
 
       case 1:
         return (
@@ -55,10 +81,11 @@ const LabProcessingCard = ({ patient, onSubmit }) => {
 
       case 2:
         return (
-          formData.crossMatchBloodGroup &&
-          formData.donorComponent &&
-          formData.crossCollectionDate &&
-          formData.crossExpiryDate &&
+          formData.unitNumber &&
+          formData.donorBloodGroup &&
+          formData.component &&
+          formData.collectionDate &&
+          formData.expiryDate &&
           formData.issueNumber &&
           formData.crossMatchResult
         );
@@ -68,9 +95,13 @@ const LabProcessingCard = ({ patient, onSubmit }) => {
     }
   };
 
-  const savePatient = (completed = false) => {
+  const savePatient = (
+    completed = false
+  ) => {
     if (!validateCurrentStep()) {
-      toast.warning("Please complete all required fields.");
+      toast.warning(
+        "Please complete all required fields."
+      );
       return;
     }
 
@@ -84,48 +115,137 @@ const LabProcessingCard = ({ patient, onSubmit }) => {
       lab: {
         ...patient.lab,
 
-        technician: patient.lab?.technician || "Lab Technician",
+        technician:
+          patient.lab?.technician ||
+          "Lab Technician",
 
-        startedAt: patient.lab?.startedAt || new Date().toISOString(),
+        startedAt:
+          patient.lab?.startedAt ||
+          new Date().toISOString(),
 
-        completedAt: completed ? new Date().toISOString() : null,
+        completedAt: completed
+          ? new Date().toISOString()
+          : null,
 
-        currentStep: completed ? steps.length - 1 : activeStep + 1,
+        currentStep: completed
+          ? steps.length - 1
+          : activeStep + 1,
 
         bloodGrouping: {
-          confirmedABOGroup: formData.confirmedABOGroup,
-          confirmedRhType: formData.confirmedRhType,
+          confirmedABOGroup:
+            formData.confirmedABOGroup,
+          confirmedRhType:
+            formData.confirmedRhType,
         },
 
         donorDetails: {
           unitNo: formData.unitNumber,
-          bloodGroup: formData.donorBloodGroup,
-          collectionDate: formData.collectionDate?.toISOString() ?? null,
-          expiryDate: formData.expiryDate?.toISOString() ?? null,
+          bloodGroup:
+            formData.donorBloodGroup,
+          rhType: formData.donorRhType,
+          collectionDate:
+            formData.collectionDate?.toISOString() ??
+            null,
+          expiryDate:
+            formData.expiryDate?.toISOString() ??
+            null,
           component: formData.component,
           volume: formData.volume,
-          viralScreening: formData.viralScreening,
+          viralScreening:
+            formData.viralScreening,
         },
 
         crossMatching: {
-          bloodGroup: formData.crossMatchBloodGroup,
-          donorComponent: formData.donorComponent,
-          collectionDate: formData.crossCollectionDate?.toISOString() ?? null,
-          expiryDate: formData.crossExpiryDate?.toISOString() ?? null,
-          issueNumber: formData.issueNumber,
-          crossMatchingResult: formData.crossMatchResult,
+          bloodGroup:
+            formData.donorBloodGroup,
+          donorComponent:
+            formData.component,
+          collectionDate:
+            formData.collectionDate?.toISOString() ??
+            null,
+          expiryDate:
+            formData.expiryDate?.toISOString() ??
+            null,
+          issueNumber:
+            formData.issueNumber,
+          crossMatchingResult:
+            formData.crossMatchResult,
         },
 
-        compatibilityStatus: completed
-          ? COMPATIBILITY_STATUS.COMPATIBLE
-          : COMPATIBILITY_STATUS.PENDING,
+        compatibilityStatus:
+          completed
+            ? COMPATIBILITY_STATUS.COMPATIBLE
+            : COMPATIBILITY_STATUS.PENDING,
       },
     };
 
     onSubmit(updatedPatient);
 
     if (completed) {
-      toast.success("Lab processing completed successfully.");
+      const existingReport =
+        getCompatibilityReportByRequisitionId(
+          patient.requisitionId
+        );
+
+      if (!existingReport) {
+        const donor = getDonors().find(
+          (d) =>
+            d.unitNumber ===
+            formData.unitNumber
+        );
+
+        saveCompatibilityReport({
+          id: crypto.randomUUID(),
+
+          reportId: `SMBB-${String(
+            Date.now()
+          ).slice(-3)}`,
+
+          requisitionId:
+            patient.requisitionId,
+
+          patientId: patient.id,
+
+          patientName:
+            patient.patientName,
+
+          donorId: donor?.donorId,
+
+          donorName:
+            donor?.donorName,
+
+          unitNumber:
+            formData.unitNumber,
+
+          bloodGroup: `${formData.donorBloodGroup}${
+            formData.donorRhType ===
+            "Positive"
+              ? "+"
+              : "-"
+          }`,
+
+          component:
+            formData.component,
+
+          crossMatchResult:
+            formData.crossMatchResult,
+
+          compatibilityStatus:
+            COMPATIBILITY_STATUS.COMPATIBLE,
+
+          technician:
+            updatedPatient.lab
+              .technician,
+
+          createdAt:
+            new Date().toISOString(),
+        });
+      }
+
+      toast.success(
+        "Lab processing completed successfully."
+      );
+
       return;
     }
 
@@ -139,11 +259,17 @@ const LabProcessingCard = ({ patient, onSubmit }) => {
   return (
     <AppCard>
       <Stack spacing={3}>
-        <Typography variant="h6" fontWeight={600}>
+        <Typography
+          variant="h6"
+          fontWeight={600}
+        >
           Lab Processing Workflow
         </Typography>
 
-        <WorkflowStepper steps={steps} activeStep={activeStep} />
+        <WorkflowStepper
+          steps={steps}
+          activeStep={activeStep}
+        />
 
         <Divider />
 
@@ -156,11 +282,18 @@ const LabProcessingCard = ({ patient, onSubmit }) => {
         )}
 
         {activeStep === 1 && (
-          <DonorDetailsForm formData={formData} onChange={handleChange} />
+          <DonorDetailsForm
+            patient={patient}
+            formData={formData}
+            onChange={handleChange}
+          />
         )}
 
         {activeStep === 2 && (
-          <CrossMatchingForm formData={formData} onChange={handleChange} />
+          <CrossMatchingForm
+            formData={formData}
+            onChange={handleChange}
+          />
         )}
 
         <Divider />
@@ -168,13 +301,18 @@ const LabProcessingCard = ({ patient, onSubmit }) => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent:
+              "space-between",
           }}
         >
           {activeStep > 0 ? (
             <AppButton
               variant="outlined"
-              onClick={() => setActiveStep((prev) => prev - 1)}
+              onClick={() =>
+                setActiveStep(
+                  (prev) => prev - 1
+                )
+              }
             >
               Back
             </AppButton>
@@ -182,12 +320,24 @@ const LabProcessingCard = ({ patient, onSubmit }) => {
             <Box />
           )}
 
-          {activeStep === steps.length - 1 ? (
-            <AppButton color="success" onClick={() => savePatient(true)}>
+          {activeStep ===
+          steps.length - 1 ? (
+            <AppButton
+              color="success"
+              onClick={() =>
+                savePatient(true)
+              }
+            >
               Submit
             </AppButton>
           ) : (
-            <AppButton onClick={() => savePatient(false)}>Next</AppButton>
+            <AppButton
+              onClick={() =>
+                savePatient(false)
+              }
+            >
+              Next
+            </AppButton>
           )}
         </Box>
       </Stack>

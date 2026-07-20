@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 
 import AuthLeftSection from "../components/AuthLeftSection";
-import LoginForm from "../components/LoginForm";
+import RegisterForm from "../components/RegisterForm";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   return (
     <Box
       sx={{
@@ -40,7 +40,7 @@ const LoginPage = () => {
         <Box
           sx={{
             width: "100%",
-            maxWidth: 460,
+            maxWidth: 520,
           }}
         >
           <Typography
@@ -54,7 +54,7 @@ const LoginPage = () => {
               },
             }}
           >
-            Welcome Back
+            Create Account
           </Typography>
 
           <Typography
@@ -63,14 +63,15 @@ const LoginPage = () => {
               mb: 5,
             }}
           >
-            Sign in to continue to your account.
+            Register to access the Blood Centre Management
+            System.
           </Typography>
 
-          <LoginForm />
+          <RegisterForm />
         </Box>
       </Box>
     </Box>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
