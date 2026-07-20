@@ -172,6 +172,7 @@ const LoginForm = () => {
           underline="hover"
           fontWeight={600}
           fontSize={14}
+          onClick={()=>navigate('/sign-up')}
         >
           Sign Up
         </Link>

@@ -4,70 +4,71 @@ import AppSelect from "../../../components/common/AppSelect";
 import FormDateTimePicker from "../../../components/common/FormDateTimePicker";
 import FormTextField from "../../../components/common/FormTextField";
 
-import {
-  bloodGroups,
-  bloodComponents,
-} from "../../../constants/frontDeskMockData";
-
 import { crossMatchResultOptions } from "../../../constants/labMockData";
 
-const CrossMatchingForm = ({ formData, onChange }) => {
+const CrossMatchingForm = ({
+  formData,
+  onChange,
+}) => {
   return (
     <Grid container spacing={2}>
       <Grid size={{ xs: 12, md: 6 }}>
         <AppSelect
           label="Blood Group"
-          value={formData.crossMatchBloodGroup}
-          onChange={(e) =>
-            onChange("crossMatchBloodGroup", e.target.value)
-          }
-          options={bloodGroups.map((group) => ({
-            label: group,
-            value: group,
-          }))}
+          value={formData.donorBloodGroup}
+          disabled
+          options={[
+            {
+              label:
+                formData.donorBloodGroup || "-",
+              value:
+                formData.donorBloodGroup || "",
+            },
+          ]}
         />
       </Grid>
 
       <Grid size={{ xs: 12, md: 6 }}>
         <AppSelect
-          label="Donor Component"
-          value={formData.donorComponent}
-          onChange={(e) =>
-            onChange("donorComponent", e.target.value)
-          }
-          options={bloodComponents.map((component) => ({
-            label: component.name,
-            value: component.value,
-          }))}
+          label="Blood Component"
+          value={formData.component}
+          disabled
+          options={[
+            {
+              label:
+                formData.component || "-",
+              value:
+                formData.component || "",
+            },
+          ]}
         />
       </Grid>
 
       <Grid size={{ xs: 12, md: 6 }}>
         <FormDateTimePicker
           label="Collection Date"
-          value={formData.crossCollectionDate}
-          onChange={(value) =>
-            onChange("crossCollectionDate", value)
-          }
+          value={formData.collectionDate}
+          disabled
         />
       </Grid>
 
       <Grid size={{ xs: 12, md: 6 }}>
         <FormDateTimePicker
           label="Expiry Date"
-          value={formData.crossExpiryDate}
-          onChange={(value) =>
-            onChange("crossExpiryDate", value)
-          }
+          value={formData.expiryDate}
+          disabled
         />
       </Grid>
 
       <Grid size={{ xs: 12, md: 6 }}>
         <AppSelect
-          label="Cross Matching Result"
+          label="Cross Match Result *"
           value={formData.crossMatchResult}
           onChange={(e) =>
-            onChange("crossMatchResult", e.target.value)
+            onChange(
+              "crossMatchResult",
+              e.target.value
+            )
           }
           options={crossMatchResultOptions}
         />
@@ -78,7 +79,10 @@ const CrossMatchingForm = ({ formData, onChange }) => {
           label="Issue Number"
           value={formData.issueNumber}
           onChange={(e) =>
-            onChange("issueNumber", e.target.value)
+            onChange(
+              "issueNumber",
+              e.target.value
+            )
           }
         />
       </Grid>

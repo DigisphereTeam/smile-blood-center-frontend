@@ -5,7 +5,6 @@ import FormTextField from "../../../../components/common/FormTextField";
 import AppSelect from "../../../../components/common/AppSelect";
 
 import {
-  bloodGroups,
   bloodComponents,
   genderOptions,
 } from "../../../../constants/frontdeskMockData";
@@ -14,6 +13,36 @@ import {
   donationTypeOptions,
   collectionVolumeOptions,
 } from "../../../../constants/donorMockData";
+
+const bloodGroupOptions = [
+  {
+    label: "A",
+    value: "A",
+  },
+  {
+    label: "B",
+    value: "B",
+  },
+  {
+    label: "AB",
+    value: "AB",
+  },
+  {
+    label: "O",
+    value: "O",
+  },
+];
+
+const rhTypeOptions = [
+  {
+    label: "Positive (+)",
+    value: "Positive",
+  },
+  {
+    label: "Negative (-)",
+    value: "Negative",
+  },
+];
 
 const DonorRegistrationForm = ({
   formData,
@@ -67,18 +96,27 @@ const DonorRegistrationForm = ({
         />
       </Grid>
 
-      {/* Blood Group */}
+      {/* Blood Group (ABO) */}
       <Grid size={{ xs: 12, md: 6 }}>
         <AppSelect
-          label="Blood Group *"
+          label="Blood Group (ABO) *"
           value={formData.bloodGroup}
           onChange={(e) =>
             onChange("bloodGroup", e.target.value)
           }
-          options={bloodGroups.map((group) => ({
-            label: group,
-            value: group,
-          }))}
+          options={bloodGroupOptions}
+        />
+      </Grid>
+
+      {/* Rh Type */}
+      <Grid size={{ xs: 12, md: 6 }}>
+        <AppSelect
+          label="Rh Type *"
+          value={formData.rhType}
+          onChange={(e) =>
+            onChange("rhType", e.target.value)
+          }
+          options={rhTypeOptions}
         />
       </Grid>
 
@@ -98,7 +136,7 @@ const DonorRegistrationForm = ({
       </Grid>
 
       {/* Donation Type */}
-      <Grid size={{ xs: 12, md: 6 }}>
+      {/* <Grid size={{ xs: 12, md: 6 }}>
         <AppSelect
           label="Donation Type *"
           value={formData.donationType}
@@ -107,7 +145,7 @@ const DonorRegistrationForm = ({
           }
           options={donationTypeOptions}
         />
-      </Grid>
+      </Grid> */}
 
       {/* Collection Volume */}
       <Grid size={{ xs: 12, md: 6 }}>

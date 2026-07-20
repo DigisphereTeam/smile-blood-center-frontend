@@ -42,12 +42,12 @@ const navigation = [
     icon: BiotechOutlinedIcon,
     roles: [ROLES.TECHNICAL, ROLES.ADMIN],
   },
-  {
-    title: "Label Generation",
-    path: "/label-generation",
-    icon: LocalOfferOutlinedIcon,
-    roles: [ROLES.TECHNICAL, ROLES.ADMIN],
-  },
+  // {
+  //   title: "Label Generation",
+  //   path: "/label-generation",
+  //   icon: LocalOfferOutlinedIcon,
+  //   roles: [ROLES.TECHNICAL, ROLES.ADMIN],
+  // },
   {
     title: "Compatibility Report",
     path: "/compatibility-report",

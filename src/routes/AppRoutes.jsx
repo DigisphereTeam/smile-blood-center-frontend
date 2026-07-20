@@ -18,6 +18,9 @@ import DashboardLayout from "../layouts/DashboardLayout/DashboardLayout";
 
 import ProtectedRoute from "./ProtectedRoute";
 import RoleGuard from "./RoleGuard";
+import CompatibilityReportPage from "../features/lab/pages/CompatibilityReportPage";
+import RegisterPage from "../features/auth/pages/RegisterPage";
+
 
 const AppRoutes = () => {
   return (
@@ -27,6 +30,7 @@ const AppRoutes = () => {
 
       {/* Public Routes */}
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/sign-up" element={<RegisterPage />} />
 
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
@@ -99,8 +103,8 @@ const AppRoutes = () => {
             />
 
             <Route
-              path="/label-generation"
-              element={<LabelGenerationPage />}
+              path="/compatibility-report"
+              element={<CompatibilityReportPage />}
             />
 
             {/*

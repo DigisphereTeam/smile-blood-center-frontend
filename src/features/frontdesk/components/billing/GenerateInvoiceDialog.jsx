@@ -10,6 +10,41 @@ import {
 
 import AppButton from "../../../../components/common/AppButton";
 
+const ChargeRow = ({
+  label,
+  amount,
+  bold = false,
+  color = "text.primary",
+}) => (
+  <Stack
+    direction="row"
+    alignItems="center"
+    sx={{
+      width: "100%",
+      py: 0.25,
+    }}
+  >
+    <Typography
+      color={color}
+      fontWeight={bold ? 600 : 400}
+      sx={{ flex: 1 }}
+    >
+      {label}
+    </Typography>
+
+    <Typography
+      fontWeight={bold ? 600 : 500}
+      sx={{
+        width: 120,
+        textAlign: "right",
+        flexShrink: 0,
+      }}
+    >
+      ₹{amount.toFixed(2)}
+    </Typography>
+  </Stack>
+);
+
 const GenerateInvoiceDialog = ({
   open,
   patient,
@@ -57,84 +92,51 @@ const GenerateInvoiceDialog = ({
           <Divider />
 
           {/* Charges */}
-          <Stack spacing={1.5}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-            >
-              <Typography>Processing Charge</Typography>
+          <Stack spacing={1.25}>
+            <ChargeRow
+              label="Processing Charge"
+              amount={processingCharge}
+            />
 
-              <Typography>
-                ₹{processingCharge.toFixed(2)}
-              </Typography>
-            </Stack>
+            <ChargeRow
+              label="Testing Charge"
+              amount={testingCharge}
+            />
 
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-            >
-              <Typography>Testing Charge</Typography>
+            <ChargeRow
+              label="Cross Match Charge"
+              amount={crossMatchCharge}
+            />
 
-              <Typography>
-                ₹{testingCharge.toFixed(2)}
-              </Typography>
-            </Stack>
+            <ChargeRow
+              label="Component Charge"
+              amount={componentCharge}
+            />
 
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-            >
-              <Typography>Cross Match Charge</Typography>
+            <Divider />
 
-              <Typography>
-                ₹{crossMatchCharge.toFixed(2)}
-              </Typography>
-            </Stack>
+            <ChargeRow
+              label="Subtotal"
+              amount={subtotal}
+              bold
+            />
 
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-            >
-              <Typography>Component Charge</Typography>
-
-              <Typography>
-                ₹{componentCharge.toFixed(2)}
-              </Typography>
-            </Stack>
+            <ChargeRow
+              label="GST (5%)"
+              amount={tax}
+            />
 
             <Divider />
 
             <Stack
               direction="row"
-              justifyContent="space-between"
-            >
-              <Typography>Subtotal</Typography>
-
-              <Typography>
-                ₹{subtotal.toFixed(2)}
-              </Typography>
-            </Stack>
-
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-            >
-              <Typography>GST (5%)</Typography>
-
-              <Typography>
-                ₹{tax.toFixed(2)}
-              </Typography>
-            </Stack>
-
-            <Divider />
-
-            <Stack
-              direction="row"
-              justifyContent="space-between"
+              alignItems="center"
+              sx={{ width: "100%" }}
             >
               <Typography
                 variant="h6"
                 fontWeight={700}
+                sx={{ flex: 1 }}
               >
                 Total Amount
               </Typography>
@@ -143,6 +145,11 @@ const GenerateInvoiceDialog = ({
                 variant="h6"
                 color="primary.main"
                 fontWeight={700}
+                sx={{
+                  width: 120,
+                  textAlign: "right",
+                  flexShrink: 0,
+                }}
               >
                 ₹{total.toFixed(2)}
               </Typography>

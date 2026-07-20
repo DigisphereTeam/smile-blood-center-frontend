@@ -11,19 +11,26 @@ const ChargeRow = ({
 }) => (
   <Stack
     direction="row"
-    justifyContent="space-between"
     alignItems="center"
-    sx={{ py: 0.25 }}
+    sx={{
+      py: 0.25,
+      width: "100%",
+    }}
   >
-    <Typography color={color} fontWeight={bold ? 600 : 400}>
+    <Typography
+      color={color}
+      fontWeight={bold ? 600 : 400}
+      sx={{ flex: 1 }}
+    >
       {label}
     </Typography>
 
     <Typography
       fontWeight={500}
       sx={{
-        minWidth: 90,
+        width: 120,
         textAlign: "right",
+        flexShrink: 0,
       }}
     >
       ₹{amount.toFixed(2)}
@@ -39,7 +46,10 @@ const ChargesSummaryCard = ({
   onGenerateInvoice,
 }) => {
   const subtotal =
-    processingCharge + testingCharge + crossMatchCharge + componentCharge;
+    processingCharge +
+    testingCharge +
+    crossMatchCharge +
+    componentCharge;
 
   const tax = subtotal * 0.05;
 
@@ -63,7 +73,7 @@ const ChargesSummaryCard = ({
 
           <Divider />
 
-          <ChargeRow label="Subtotal" amount={subtotal} />
+          <ChargeRow label="Subtotal" amount={subtotal} bold />
 
           <ChargeRow label="Tax (5%)" amount={tax} />
 
@@ -71,14 +81,27 @@ const ChargesSummaryCard = ({
 
           <Stack
             direction="row"
-            justifyContent="space-between"
             alignItems="center"
+            sx={{ width: "100%" }}
           >
-            <Typography variant="subtitle1" fontWeight={700}>
+            <Typography
+              variant="subtitle1"
+              fontWeight={700}
+              sx={{ flex: 1 }}
+            >
               Total Amount
             </Typography>
 
-            <Typography variant="h6" color="error.main" fontWeight={700}>
+            <Typography
+              variant="h6"
+              color="error.main"
+              fontWeight={700}
+              sx={{
+                width: 120,
+                textAlign: "right",
+                flexShrink: 0,
+              }}
+            >
               ₹{total.toFixed(2)}
             </Typography>
           </Stack>

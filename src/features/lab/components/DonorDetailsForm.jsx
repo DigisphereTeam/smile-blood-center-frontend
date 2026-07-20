@@ -1,30 +1,91 @@
+import { useEffect, useMemo } from "react";
 import { Grid } from "@mui/material";
+import dayjs from "dayjs";
 
 import AppSelect from "../../../components/common/AppSelect";
 import FormDateTimePicker from "../../../components/common/FormDateTimePicker";
 
-import {
-  bloodGroups,
-  bloodComponents,
-} from "../../../constants/frontDeskMockData";
+import { getDonors } from "../../storage/donorStorageApi";
 
-import {
-  unitNumberOptions,
-  volumeOptions,
-  viralScreeningOptions,
-} from "../../../constants/labMockData";
+import { viralScreeningOptions } from "../../../constants/labMockData";
 
-const DonorDetailsForm = ({ formData, onChange }) => {
+const DonorDetailsForm = ({
+  patient,
+  formData,
+  onChange,
+}) => {
+  const donors = getDonors();
+
+  // Patient blood group
+  const patientABO =
+    patient?.bloodGroup?.replace("+", "").replace("-", "");
+
+  const patientRh =
+    patient?.bloodGroup?.endsWith("+")
+      ? "Positive"
+      : "Negative";
+
+  // Required component
+  const requiredComponent =
+    patient?.bloodComponents?.[0]?.component;
+
+  // Matching donors
+  const matchingDonors = useMemo(() => {
+    return donors.filter(
+      (donor) =>
+        donor.status === "AVAILABLE" &&
+        donor.bloodGroup === patientABO &&
+        donor.rhType === patientRh &&
+        donor.component === requiredComponent
+    );
+  }, [
+    donors,
+    patientABO,
+    patientRh,
+    requiredComponent,
+  ]);
+
+  // Auto-fill donor details
+  useEffect(() => {
+    if (!formData.unitNumber) return;
+
+    const donor = matchingDonors.find(
+      (d) => d.unitNumber === formData.unitNumber
+    );
+
+    if (!donor) return;
+
+    onChange("donorBloodGroup", donor.bloodGroup);
+    onChange("donorRhType", donor.rhType);
+    onChange("component", donor.component);
+    onChange("volume", donor.volume);
+    onChange(
+      "collectionDate",
+      donor.collectionDate
+        ? dayjs(donor.collectionDate)
+        : null
+    );
+    onChange(
+      "expiryDate",
+      donor.expiryDate
+        ? dayjs(donor.expiryDate)
+        : null
+    );
+  }, [formData.unitNumber]);
+
   return (
     <Grid container spacing={2}>
-      <Grid size={{ xs: 12, md: 6 }}>
+      <Grid size={{ xs: 12 }}>
         <AppSelect
-          label="Unit Number"
+          label="Select Donor Unit *"
           value={formData.unitNumber}
           onChange={(e) =>
             onChange("unitNumber", e.target.value)
           }
-          options={unitNumberOptions}
+          options={matchingDonors.map((donor) => ({
+            value: donor.unitNumber,
+            label: `${donor.unitNumber} • ${donor.donorName} • ${donor.bloodGroup}${donor.rhType === "Positive" ? "+" : "-"} • ${donor.component.toUpperCase()}`,
+          }))}
         />
       </Grid>
 
@@ -32,13 +93,27 @@ const DonorDetailsForm = ({ formData, onChange }) => {
         <AppSelect
           label="Blood Group"
           value={formData.donorBloodGroup}
-          onChange={(e) =>
-            onChange("donorBloodGroup", e.target.value)
-          }
-          options={bloodGroups.map((group) => ({
-            label: group,
-            value: group,
-          }))}
+          disabled
+          options={[
+            {
+              label: formData.donorBloodGroup || "-",
+              value: formData.donorBloodGroup || "",
+            },
+          ]}
+        />
+      </Grid>
+
+      <Grid size={{ xs: 12, md: 6 }}>
+        <AppSelect
+          label="Rh Type"
+          value={formData.donorRhType}
+          disabled
+          options={[
+            {
+              label: formData.donorRhType || "-",
+              value: formData.donorRhType || "",
+            },
+          ]}
         />
       </Grid>
 
@@ -46,9 +121,7 @@ const DonorDetailsForm = ({ formData, onChange }) => {
         <FormDateTimePicker
           label="Collection Date"
           value={formData.collectionDate}
-          onChange={(value) =>
-            onChange("collectionDate", value)
-          }
+          disabled
         />
       </Grid>
 
@@ -56,23 +129,21 @@ const DonorDetailsForm = ({ formData, onChange }) => {
         <FormDateTimePicker
           label="Expiry Date"
           value={formData.expiryDate}
-          onChange={(value) =>
-            onChange("expiryDate", value)
-          }
+          disabled
         />
       </Grid>
 
       <Grid size={{ xs: 12, md: 6 }}>
         <AppSelect
-          label="Component"
+          label="Blood Component"
           value={formData.component}
-          onChange={(e) =>
-            onChange("component", e.target.value)
-          }
-          options={bloodComponents.map((component) => ({
-            label: component.name,
-            value: component.value,
-          }))}
+          disabled
+          options={[
+            {
+              label: formData.component?.toUpperCase() || "-",
+              value: formData.component || "",
+            },
+          ]}
         />
       </Grid>
 
@@ -80,19 +151,27 @@ const DonorDetailsForm = ({ formData, onChange }) => {
         <AppSelect
           label="Volume"
           value={formData.volume}
-          onChange={(e) =>
-            onChange("volume", e.target.value)
-          }
-          options={volumeOptions}
+          disabled
+          options={[
+            {
+              label: formData.volume
+                ? `${formData.volume} ml`
+                : "-",
+              value: formData.volume || "",
+            },
+          ]}
         />
       </Grid>
 
       <Grid size={{ xs: 12, md: 6 }}>
         <AppSelect
-          label="Viral Screening"
+          label="Viral Screening *"
           value={formData.viralScreening}
           onChange={(e) =>
-            onChange("viralScreening", e.target.value)
+            onChange(
+              "viralScreening",
+              e.target.value
+            )
           }
           options={viralScreeningOptions}
         />
