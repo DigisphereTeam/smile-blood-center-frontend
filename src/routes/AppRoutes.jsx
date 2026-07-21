@@ -11,7 +11,7 @@ import PatientRequisitionList from "../features/frontdesk/pages/PatientRequisiti
 
 import CreateDonorPage from "../features/lab/pages/CreateDonorPage";
 import DonorRegistrationPage from "../features/lab/pages/DonorRegistrationPage";
-import LabelGenerationPage from "../features/lab/pages/LabelGenerationPage";
+// import LabelGenerationPage from "../features/lab/pages/LabelGenerationPage";
 import LabProcessingPage from "../features/lab/pages/LabProcessingPage";
 
 import DashboardLayout from "../layouts/DashboardLayout/DashboardLayout";
@@ -20,7 +20,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import RoleGuard from "./RoleGuard";
 import CompatibilityReportPage from "../features/lab/pages/CompatibilityReportPage";
 import RegisterPage from "../features/auth/pages/RegisterPage";
-
+import PatientRequisitionView from "../features/frontdesk/pages/PatientRequisitionView";
+import PatientRequisitionEdit from "../features/frontdesk/pages/PatientRequisitionEdit";
 
 const AppRoutes = () => {
   return (
@@ -36,28 +37,14 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           {/* ===================== Admin ===================== */}
-          <Route
-            element={
-              <RoleGuard
-                allowedRoles={[ROLES.ADMIN]}
-              />
-            }
-          >
-            <Route
-              path="/dashboard"
-              element={<DashboardPage />}
-            />
+          <Route element={<RoleGuard allowedRoles={[ROLES.ADMIN]} />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
           </Route>
 
           {/* ===================== Front Desk ===================== */}
           <Route
             element={
-              <RoleGuard
-                allowedRoles={[
-                  ROLES.FRONTDESK,
-                  ROLES.ADMIN,
-                ]}
-              />
+              <RoleGuard allowedRoles={[ROLES.FRONTDESK, ROLES.ADMIN]} />
             }
           >
             <Route
@@ -71,20 +58,22 @@ const AppRoutes = () => {
             />
 
             <Route
-              path="/billing"
-              element={<BillingPage />}
+              path="/frontdesk/patient-requisition/view/:id"
+              element={<PatientRequisitionView />}
             />
+
+            <Route 
+              path="/frontdesk/patient-requisition/edit/:id" 
+              element={<PatientRequisitionEdit/>}
+            />
+
+            <Route path="/billing" element={<BillingPage />} />
           </Route>
 
           {/* ===================== Technical ===================== */}
           <Route
             element={
-              <RoleGuard
-                allowedRoles={[
-                  ROLES.TECHNICAL,
-                  ROLES.ADMIN,
-                ]}
-              />
+              <RoleGuard allowedRoles={[ROLES.TECHNICAL, ROLES.ADMIN]} />
             }
           >
             <Route
@@ -97,10 +86,7 @@ const AppRoutes = () => {
               element={<CreateDonorPage />}
             />
 
-            <Route
-              path="/lab-processing"
-              element={<LabProcessingPage />}
-            />
+            <Route path="/lab-processing" element={<LabProcessingPage />} />
 
             <Route
               path="/compatibility-report"
@@ -118,16 +104,10 @@ const AppRoutes = () => {
       </Route>
 
       {/* Unauthorized */}
-      <Route
-        path="/unauthorized"
-        element={<div>Unauthorized Access</div>}
-      />
+      <Route path="/unauthorized" element={<div>Unauthorized Access</div>} />
 
       {/* 404 */}
-      <Route
-        path="*"
-        element={<div>404 - Page Not Found</div>}
-      />
+      <Route path="*" element={<div>404 - Page Not Found</div>} />
     </Routes>
   );
 };

@@ -11,14 +11,17 @@ import {
   Typography,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
-import AppCard from "../../../components/common/AppCard";
-import SectionHeader from "../../../components/common/SectionHeader";
-import { bloodComponents } from "../../../constants/frontdeskMockData";
-import FormDateTimePicker from "../../../components/common/FormDateTimePicker";
-import RHFTextField from "../../../components/common/RHFTextField";
-import RHFSelect from "../../../components/common/RHFSelect";
+import AppCard from "../../../../components/common/AppCard";
+import SectionHeader from "../../../../components/common/SectionHeader";
+import { bloodComponents } from "../../../../constants/frontdeskMockData";
+import FormDateTimePicker from "../../../../components/common/FormDateTimePicker";
+import RHFTextField from "../../../../components/common/RHFTextField";
+import RHFSelect from "../../../../components/common/RHFSelect";
 
-const BloodComponentTable = ({ control }) => {
+const BloodComponentTable = ({
+  control,
+  disabled = false,
+}) => {
   return (
     <AppCard sx={{ mb: 2 }}>
       <SectionHeader title="Step 3 : Blood Component Requirement" />
@@ -69,7 +72,10 @@ const BloodComponentTable = ({ control }) => {
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onChange={(e) => field.onChange(e.target.checked)}
+                          disabled={disabled}
+                          onChange={(e) =>
+                            field.onChange(e.target.checked)
+                          }
                           sx={{
                             p: 0.5,
                           }}
@@ -96,15 +102,17 @@ const BloodComponentTable = ({ control }) => {
                     name={`bloodComponents.${index}.units`}
                     type="number"
                     placeholder="0"
+                    disabled={disabled}
                   />
                 </TableCell>
 
-                {/* Date */}
+                {/* Required Date & Time */}
 
                 <TableCell>
                   <FormDateTimePicker
                     control={control}
                     name={`bloodComponents.${index}.requiredDateTime`}
+                    disabled={disabled}
                   />
                 </TableCell>
 
@@ -119,6 +127,7 @@ const BloodComponentTable = ({ control }) => {
                       { label: "Yes", value: true },
                     ]}
                     isBoolean
+                    disabled={disabled}
                   />
                 </TableCell>
               </TableRow>

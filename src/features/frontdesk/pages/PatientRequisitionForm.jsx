@@ -4,19 +4,24 @@ import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+
 import PageHeader from "../../../components/common/PageHeader";
-import PatientDetailsForm from "../components/PatientDetailsForm";
-import TransfusionIndication from "../components/TransfusionIndication";
-import BloodComponentTable from "../components/BloodComponentTable";
-import EmergencyDetails from "../components/EmergencyDetails";
 import AppButton from "../../../components/common/AppButton";
+
+import PatientDetailsForm from "../components/patient-requisition/PatientDetailsForm";
+import TransfusionIndication from "../components/patient-requisition/TransfusionIndication";
+import BloodComponentTable from "../components/patient-requisition/BloodComponentTable";
+import EmergencyDetails from "../components/patient-requisition/EmergencyDetails";
+
 import { patientRequisitionSchema } from "../schemas/patientRequisition.schema";
 import { bloodComponents } from "../../../constants/frontdeskMockData";
-
-import { savePatient } from "../../storage/requisitionStorageApi";
+import { useCreatePatientRequisition } from "../hooks/useCreatePatientRequisition";
 
 const PatientRequisitionForm = () => {
   const navigate = useNavigate();
+
+  const { mutateAsync: createPatientRequisition, isPending } =
+    useCreatePatientRequisition();
 
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(patientRequisitionSchema),
@@ -25,10 +30,10 @@ const PatientRequisitionForm = () => {
       patientName: "",
       hospital: "",
       bloodGroup: "",
-      age: "",
-      diagnosis: "",
       rhType: "",
+      age: "",
       gender: "",
+      diagnosis: "",
       ipNumber: "",
       referredBy: "",
       wardNumber: "",
@@ -50,7 +55,7 @@ const PatientRequisitionForm = () => {
 
       bloodComponents: bloodComponents.map((item) => ({
         component: item.value,
-        selected: false, 
+        selected: false,
         units: "",
         requiredDateTime: dayjs(),
         reserve: false,
@@ -59,17 +64,22 @@ const PatientRequisitionForm = () => {
       isEmergency: false,
       requirementSelection: "",
       physicianName: "",
-      physicianSignature: "",
     },
   });
 
- const onSubmit = (data) => {
-  savePatient(data);
+  const onSubmit = async (formData) => {
+    try {
+      await createPatientRequisition(formData);
 
-  toast.success("Patient Requisition Created Successfully");
+      toast.success("Patient Requisition Created Successfully");
 
-  navigate("/frontdesk/patient-requisition");
-};
+      navigate("/frontdesk/patient-requisition");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to create requisition."
+      );
+    }
+  };
 
   return (
     <Box>
@@ -100,7 +110,12 @@ const PatientRequisitionForm = () => {
             justifyContent: "flex-end",
           }}
         >
-          <AppButton type="submit" size="large">
+          <AppButton
+            type="submit"
+            size="large"
+            loading={isPending}
+            disabled={isPending}
+          >
             Submit Requisition
           </AppButton>
         </Box>

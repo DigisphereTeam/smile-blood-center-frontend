@@ -1,16 +1,13 @@
-export const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
-
-export const hospitals = [
-  { label: "Apollo Hospital", value: "apollo" },
-  { label: "NIMS Hospital", value: "nims" },
-  { label: "Yashoda Hospital", value: "yashoda" },
-  { label: "Care Hospital", value: "care" },
+export const bloodGroups = [
+  { label: "A", value: "A" },
+  { label: "B", value: "B" },
+  { label: "AB", value: "AB" },
+  { label: "O", value: "O" },
 ];
 
-export const doctors = [
-  { label: "Dr. Ravi Kumar", value: "dr_ravi" },
-  { label: "Dr. Satish Kumar", value: "dr_satish" },
-  { label: "Dr. Krishna", value: "dr_krishna" },
+export const rhOptions = [
+  { label: "Positive (+)", value: "+" },
+  { label: "Negative (-)", value: "-" },
 ];
 
 export const bloodComponents = [
@@ -67,7 +64,3 @@ export const genderOptions = [
   { label: "Other", value: "Other" },
 ];
 
-export const rhOptions = [
-  { label: "Positive", value: "Positive" },
-  { label: "Negative", value: "Negative" },
-];

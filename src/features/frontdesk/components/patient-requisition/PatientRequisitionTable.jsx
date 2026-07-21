@@ -11,12 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 
-import AppCard from "../../../components/common/AppCard";
-import StatusChip from "../../../components/common/StatusChip";
+import AppCard from "../../../../components/common/AppCard";
+import StatusChip from "../../../../components/common/StatusChip";
 import ActionButtons from "./ActionButtons";
 import BloodGroupChip from "./BloodGroupChip";
-
-import { hospitals } from "../../../constants/frontdeskMockData";
 
 const PatientRequisitionTable = ({ patients }) => {
   const navigate = useNavigate();
@@ -28,9 +26,6 @@ const PatientRequisitionTable = ({ patients }) => {
   const handleEdit = (id) => {
     navigate(`/frontdesk/patient-requisition/edit/${id}`);
   };
-
-  const getHospitalName = (value) =>
-    hospitals.find((hospital) => hospital.value === value)?.label || value;
 
   if (!patients.length) {
     return (
@@ -83,11 +78,11 @@ const PatientRequisitionTable = ({ patients }) => {
 
                 <TableCell>{patient.patientName}</TableCell>
 
-                <TableCell>{getHospitalName(patient.hospital)}</TableCell>
+                <TableCell>{patient.hospital}</TableCell>
 
                 <TableCell>
                   <BloodGroupChip
-                    bloodGroup={patient.bloodGroup}
+                    bloodGroup={`${patient.bloodGroup}${patient.rhType}`}
                     isEmergency={patient.isEmergency}
                   />
                 </TableCell>
