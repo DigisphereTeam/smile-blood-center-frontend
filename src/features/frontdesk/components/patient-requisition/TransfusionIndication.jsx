@@ -1,10 +1,10 @@
 import { Collapse, Grid } from "@mui/material";
 import { useWatch } from "react-hook-form";
-import AppCard from "../../../components/common/AppCard";
-import SectionHeader from "../../../components/common/SectionHeader";
-import FormCheckbox from "../../../components/common/FormCheckBox";
-import FormRadioGroup from "../../../components/common/FormRadioGroup";
-import RHFTextField from "../../../components/common/RHFTextField";
+import AppCard from "../../../../components/common/AppCard";
+import SectionHeader from "../../../../components/common/SectionHeader";
+import FormCheckbox from "../../../../components/common/FormCheckBox";
+import FormRadioGroup from "../../../../components/common/FormRadioGroup";
+import RHFTextField from "../../../../components/common/RHFTextField";
 
 const transfusionOptions = [
   { label: "Surgery", value: "Surgery" },
@@ -28,16 +28,19 @@ const yesNoOptions = [
   },
 ];
 
-const TransfusionIndication = ({ control }) => {
+const TransfusionIndication = ({
+  control,
+  disabled = false,
+}) => {
   const previousReaction = useWatch({
     control,
     name: "previousReaction",
   });
- 
- 
+
   return (
     <AppCard sx={{ mb: 2 }}>
       <SectionHeader title="Step 2 : Transfusion Indication" />
+
       <Grid container spacing={3}>
         {/* Transfusion Indications */}
 
@@ -49,6 +52,7 @@ const TransfusionIndication = ({ control }) => {
               fontSize: 16,
             }}
           />
+
           <Grid container spacing={2}>
             {transfusionOptions.map((option) => (
               <Grid
@@ -63,6 +67,7 @@ const TransfusionIndication = ({ control }) => {
                   control={control}
                   name={`transfusionIndications.${option.value}`}
                   label={option.label}
+                  disabled={disabled}
                 />
               </Grid>
             ))}
@@ -83,6 +88,7 @@ const TransfusionIndication = ({ control }) => {
             label="History of Previous Transfusion"
             options={yesNoOptions}
             isBoolean
+            disabled={disabled}
           />
         </Grid>
 
@@ -100,6 +106,7 @@ const TransfusionIndication = ({ control }) => {
             label="Any History of Previous Transfusion Reaction"
             options={yesNoOptions}
             isBoolean
+            disabled={disabled}
           />
         </Grid>
 
@@ -113,6 +120,7 @@ const TransfusionIndication = ({ control }) => {
               label="If Yes, Reaction if any during previous transfusion"
               multiline
               rows={3}
+              disabled={disabled}
             />
           </Collapse>
         </Grid>

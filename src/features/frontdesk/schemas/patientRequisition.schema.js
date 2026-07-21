@@ -8,17 +8,20 @@ export const patientRequisitionSchema = z
 
     bloodGroup: z.string().min(1, "Blood group is required"),
 
-    age: z.coerce.number().min(1).max(150),
+    age: z.coerce
+      .number()
+      .min(1, "Age is required")
+      .max(150, "Invalid age"),
 
-    diagnosis: z.string().min(1),
+    diagnosis: z.string().min(1, "Diagnosis is required"),
 
-    rhType: z.string().min(1),
+    rhType: z.string().min(1, "Rh type is required"),
 
-    gender: z.string().min(1),
+    gender: z.string().min(1, "Gender is required"),
 
-    ipNumber: z.string().min(1),
+    ipNumber: z.string().min(1, "IP Number is required"),
 
-    referredBy: z.string().min(1),
+    referredBy: z.string().min(1, "Referred By is required"),
 
     wardNumber: z.string().optional(),
 
@@ -43,16 +46,19 @@ export const patientRequisitionSchema = z
       z.object({
         component: z.string(),
 
+        selected: z.boolean(),
+
         units: z.preprocess(
           (value) => (value === "" ? null : Number(value)),
-          z.number().nullable(),
+          z.number().nullable()
         ),
 
         requiredDateTime: z.any().nullable(),
 
         reserve: z.boolean(),
-      }),
+      })
     ),
+
     isEmergency: z.boolean(),
 
     requirementSelection: z.string().optional(),
@@ -60,7 +66,8 @@ export const patientRequisitionSchema = z
     physicianName: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.previousReaction && !data.reactionDetails) {
+    // Previous transfusion reaction details
+    if (data.previousReaction && !data.reactionDetails?.trim()) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["reactionDetails"],
@@ -68,21 +75,52 @@ export const patientRequisitionSchema = z
       });
     }
 
+    // Emergency fields
     if (data.isEmergency) {
       if (!data.requirementSelection) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ["requirementSelection"],
-          message: "Requirement Selection Required",
+          message: "Compatibility Test Type is required.",
         });
       }
 
-      if (!data.physicianName) {
+      if (!data.physicianName?.trim()) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ["physicianName"],
-          message: "Doctor Name is Required",
+          message: "Doctor Name is required.",
         });
       }
     }
+
+    // At least one blood component must be selected
+    if (!data.bloodComponents.some((component) => component.selected)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["bloodComponents"],
+        message: "Select at least one blood component.",
+      });
+    }
+
+    // Validate selected blood components
+    data.bloodComponents.forEach((component, index) => {
+      if (!component.selected) return;
+
+      if (!component.units || component.units <= 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["bloodComponents", index, "units"],
+          message: "Units are required.",
+        });
+      }
+
+      if (!component.requiredDateTime) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["bloodComponents", index, "requiredDateTime"],
+          message: "Required date & time is required.",
+        });
+      }
+    });
   });
