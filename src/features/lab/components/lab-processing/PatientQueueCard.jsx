@@ -5,8 +5,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import AppCard from "../../../components/common/AppCard";
-import StatusChip from "../../../components/common/StatusChip";
+import AppCard from "../../../../components/common/AppCard";
+import StatusChip from "../../../../components/common/StatusChip";
 
 const formatComponent = (component) => {
   if (!component) return "-";

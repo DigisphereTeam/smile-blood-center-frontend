@@ -2,12 +2,12 @@ import { useEffect, useMemo } from "react";
 import { Grid } from "@mui/material";
 import dayjs from "dayjs";
 
-import AppSelect from "../../../components/common/AppSelect";
-import FormDateTimePicker from "../../../components/common/FormDateTimePicker";
+import AppSelect from "../../../../components/common/AppSelect";
+import FormDateTimePicker from "../../../../components/common/FormDateTimePicker";
 
-import { getDonors } from "../../storage/donorStorageApi";
+import { getDonors } from "../../../storage/donorStorageApi";
 
-import { viralScreeningOptions } from "../../../constants/labMockData";
+import { viralScreeningOptions } from "../../../../constants/labMockData";
 
 const DonorDetailsForm = ({
   patient,

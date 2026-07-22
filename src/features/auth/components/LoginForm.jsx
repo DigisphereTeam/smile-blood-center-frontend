@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -9,10 +9,8 @@ import {
   Typography,
   Link,
   Stack,
+  TextField,
 } from "@mui/material";
-
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,14 +18,14 @@ import { toast } from "react-toastify";
 import RHFTextField from "../../../components/common/RHFTextField";
 import AppButton from "../../../components/common/AppButton";
 
-import {
-  loginDefaultValues,
-  loginSchema,
-} from "../schemas/loginSchema";
+import { loginDefaultValues, loginSchema } from "../schemas/loginSchema";
 
 import useLogin from "../hooks/useLogin";
 import useAuth from "../hooks/useAuth";
 import { ROLES } from "../constants/roles";
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -35,8 +33,7 @@ const LoginForm = () => {
   const { login } = useAuth();
   const { mutate, isPending } = useLogin();
 
-  const [showPassword, setShowPassword] =
-    useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(loginSchema),
@@ -58,9 +55,7 @@ const LoginForm = () => {
             break;
 
           case ROLES.FRONTDESK:
-            navigate(
-              "/frontdesk/patient-requisition"
-            );
+            navigate("/patient-requisition");
             break;
 
           case ROLES.TECHNICAL:
@@ -73,10 +68,7 @@ const LoginForm = () => {
       },
 
       onError: (error) => {
-        toast.error(
-          error.response?.data?.message ||
-            "Login failed."
-        );
+        toast.error(error.response?.data?.message || "Login failed.");
       },
     });
   };
@@ -99,38 +91,50 @@ const LoginForm = () => {
         autoComplete="email"
       />
 
-      <RHFTextField
-        control={control}
+      <Controller
         name="password"
-        label="Password"
-        type={
-          showPassword ? "text" : "password"
-        }
-        autoComplete="current-password"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() =>
-                  setShowPassword((prev) => !prev)
-                }
-              >
-                {showPassword ? (
-                  <VisibilityOffIcon />
-                ) : (
-                  <VisibilityIcon />
-                )}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <TextField
+            {...field}
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            fullWidth
+            error={!!error}
+            helperText={error?.message}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                    >
+                      {showPassword ? (
+                        <VisibilityOffIcon />
+                      ) : (
+                        <VisibilityIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+            /* ADD THIS STYLING OVERRIDE 👇 */
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: "#e8f0fe", // Forces the container (including icon area) to match autofill blue
+              },
+              "& input:-webkit-autofill": {
+                WebkitBoxShadow: "0 0 0 100px #e8f0fe inset !important", // Keeps the input background seamless
+              },
+            }}
+          />
+        )}
       />
 
-      <Box
-        display="flex"
-        justifyContent="flex-end"
-        mt={-1}
-      >
+      <Box display="flex" justifyContent="flex-end" mt={-1}>
         <Link
           component="button"
           underline="hover"
@@ -154,16 +158,8 @@ const LoginForm = () => {
         Sign In
       </AppButton>
 
-      <Stack
-        direction="row"
-        spacing={0.5}
-        justifyContent="center"
-        mt={2}
-      >
-        <Typography
-          variant="body2"
-          color="text.secondary"
-        >
+      <Stack direction="row" spacing={0.5} justifyContent="center" mt={2}>
+        <Typography variant="body2" color="text.secondary">
           Don't have an account?
         </Typography>
 
@@ -172,7 +168,7 @@ const LoginForm = () => {
           underline="hover"
           fontWeight={600}
           fontSize={14}
-          onClick={()=>navigate('/sign-up')}
+          onClick={() => navigate("/sign-up")}
         >
           Sign Up
         </Link>

@@ -26,7 +26,7 @@ const navigation = [
   },
   {
     title: "Patient Requisition",
-    path: "/frontdesk/patient-requisition",
+    path: "/patient-requisition",
     icon: DescriptionOutlinedIcon,
     roles: [ROLES.FRONTDESK, ROLES.ADMIN],
   },

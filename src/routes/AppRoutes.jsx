@@ -48,22 +48,22 @@ const AppRoutes = () => {
             }
           >
             <Route
-              path="/frontdesk/patient-requisition"
+              path="/patient-requisition"
               element={<PatientRequisitionList />}
             />
 
             <Route
-              path="/frontdesk/patient-requisition/create"
+              path="/patient-requisition/create"
               element={<PatientRequisitionForm />}
             />
 
             <Route
-              path="/frontdesk/patient-requisition/view/:id"
+              path="/patient-requisition/view/:id"
               element={<PatientRequisitionView />}
             />
 
             <Route 
-              path="/frontdesk/patient-requisition/edit/:id" 
+              path="/patient-requisition/edit/:id" 
               element={<PatientRequisitionEdit/>}
             />
 

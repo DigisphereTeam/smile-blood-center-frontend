@@ -21,7 +21,7 @@ const PatientRequisitionList = () => {
   });
 
   const handleCreate = () => {
-    navigate("/frontdesk/patient-requisition/create");
+    navigate("/patient-requisition/create");
   };
 
   if (isLoading) {

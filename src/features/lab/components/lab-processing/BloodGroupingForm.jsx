@@ -1,7 +1,7 @@
 import { Grid, Stack, Typography } from "@mui/material";
 
-import InfoAlert from "../../../components/common/InfoAlert";
-import AppSelect from "../../../components/common/AppSelect";
+import InfoAlert from "../../../../components/common/InfoAlert";
+import AppSelect from "../../../../components/common/AppSelect";
 
 const BloodGroupingForm = ({
   patient,

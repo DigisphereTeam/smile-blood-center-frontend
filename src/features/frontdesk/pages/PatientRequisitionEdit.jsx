@@ -139,7 +139,7 @@ const PatientRequisitionEdit = () => {
       {
         onSuccess: () => {
           toast.success("Patient Requisition Updated Successfully");
-          navigate("/frontdesk/patient-requisition");
+          navigate("/patient-requisition");
         },
       }
     );

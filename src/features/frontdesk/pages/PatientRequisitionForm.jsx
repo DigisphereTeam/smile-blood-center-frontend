@@ -73,7 +73,7 @@ const PatientRequisitionForm = () => {
 
       toast.success("Patient Requisition Created Successfully");
 
-      navigate("/frontdesk/patient-requisition");
+      navigate("/patient-requisition");
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Failed to create requisition."

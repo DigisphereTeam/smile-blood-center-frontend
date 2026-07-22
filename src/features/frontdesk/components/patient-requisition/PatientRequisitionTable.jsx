@@ -20,11 +20,11 @@ const PatientRequisitionTable = ({ patients }) => {
   const navigate = useNavigate();
 
   const handleView = (id) => {
-    navigate(`/frontdesk/patient-requisition/view/${id}`);
+    navigate(`/patient-requisition/view/${id}`);
   };
 
   const handleEdit = (id) => {
-    navigate(`/frontdesk/patient-requisition/edit/${id}`);
+    navigate(`/patient-requisition/edit/${id}`);
   };
 
   if (!patients.length) {
