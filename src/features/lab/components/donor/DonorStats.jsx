@@ -5,16 +5,16 @@ import AppCard from "../../../../components/common/AppCard";
 const DonorStats = ({ donors = [] }) => {
   const totalDonors = donors.length;
 
-  const availableUnits = donors.filter(
-    (donor) => donor.status === "AVAILABLE"
+  const activeDonors = donors.filter(
+    (donor) => donor.is_active
   ).length;
 
   const voluntaryDonations = donors.filter(
-    (donor) => donor.donationType === "VOLUNTARY"
+    (donor) => donor.donation_type === "Voluntary"
   ).length;
 
   const replacementDonations = donors.filter(
-    (donor) => donor.donationType === "REPLACEMENT"
+    (donor) => donor.donation_type === "Replacement"
   ).length;
 
   const stats = [
@@ -23,8 +23,8 @@ const DonorStats = ({ donors = [] }) => {
       value: totalDonors,
     },
     {
-      title: "Available Units",
-      value: availableUnits,
+      title: "Active Donors",
+      value: activeDonors,
     },
     {
       title: "Voluntary Donations",
@@ -55,6 +55,7 @@ const DonorStats = ({ donors = [] }) => {
               <Typography
                 variant="h4"
                 fontWeight={700}
+                color="primary.main"
               >
                 {stat.value}
               </Typography>

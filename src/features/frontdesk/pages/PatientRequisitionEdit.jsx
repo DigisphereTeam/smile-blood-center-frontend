@@ -19,6 +19,7 @@ import { bloodComponents } from "../../../constants/frontdeskMockData";
 
 import { usePatientRequisition } from "../hooks/usePatientRequisition";
 import { useUpdatePatientRequisition } from "../hooks/useUpdatePatientRequisition";
+import LoadingIndicator from "../../../components/common/LoadingIndicator";
 
 const PatientRequisitionEdit = () => {
   const navigate = useNavigate();
@@ -139,7 +140,7 @@ const PatientRequisitionEdit = () => {
       {
         onSuccess: () => {
           toast.success("Patient Requisition Updated Successfully");
-          navigate("/frontdesk/patient-requisition");
+          navigate("/patient-requisition");
         },
       }
     );
@@ -148,12 +149,9 @@ const PatientRequisitionEdit = () => {
   if (isLoading) {
     return (
       <Box
-        height="70vh"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
+        
       >
-        <CircularProgress />
+        <LoadingIndicator/>
       </Box>
     );
   }

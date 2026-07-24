@@ -3,7 +3,6 @@ import {
   Toolbar,
   IconButton,
   Box,
-  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";

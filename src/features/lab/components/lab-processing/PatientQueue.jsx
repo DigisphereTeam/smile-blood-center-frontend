@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { Box, MenuItem, Stack, TextField, Typography } from "@mui/material";
 
-import AppCard from "../../../components/common/AppCard";
-import SearchField from "../../../components/common/SearchField";
+import AppCard from "../../../../components/common/AppCard";
+import SearchField from "../../../../components/common/SearchField";
 
 import PatientQueueCard from "./PatientQueueCard";
 

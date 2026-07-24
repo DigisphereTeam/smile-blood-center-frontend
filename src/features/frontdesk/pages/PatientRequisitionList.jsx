@@ -7,6 +7,7 @@ import AppButton from "../../../components/common/AppButton";
 import PatientRequisitionTable from "../components/patient-requisition/PatientRequisitionTable";
 
 import { getPatientRequisitions } from "../api/patientRequisitionApi";
+import LoadingIndicator from "../../../components/common/LoadingIndicator";
 
 const PatientRequisitionList = () => {
   const navigate = useNavigate();
@@ -21,15 +22,15 @@ const PatientRequisitionList = () => {
   });
 
   const handleCreate = () => {
-    navigate("/frontdesk/patient-requisition/create");
+    navigate("/patient-requisition/create");
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <><LoadingIndicator/></>;
   }
 
   if (isError) {
-    return <div>Something went wrong.</div>;
+    return <>Something went wrong.</>;
   }
 
   return (

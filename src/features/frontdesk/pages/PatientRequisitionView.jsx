@@ -16,6 +16,7 @@ import { bloodComponents } from "../../../constants/frontdeskMockData";
 import dayjs from "dayjs";
 
 import { usePatientRequisition } from "../hooks/usePatientRequisition";
+import LoadingIndicator from "../../../components/common/LoadingIndicator";
 
 const PatientRequisitionView = () => {
   const { id } = useParams();
@@ -125,13 +126,8 @@ const PatientRequisitionView = () => {
 
   if (isLoading) {
     return (
-      <Box
-        height="70vh"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <CircularProgress />
+      <Box>
+        <LoadingIndicator />
       </Box>
     );
   }

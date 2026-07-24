@@ -16,24 +16,18 @@ import {
 } from "@mui/material";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import AppCard from "../../../../components/common/AppCard";
 import SearchField from "../../../../components/common/SearchField";
+import StatusChip from "../../../../components/common/StatusChip";
 import BloodLabelDialog from "./BloodLabelDialog";
 
 const bloodGroups = ["A", "B", "AB", "O"];
 
-const statusOptions = [
-  "AVAILABLE",
-  "RESERVED",
-  "ISSUED",
-  "EXPIRED",
-];
-
-const DonorTable = ({ donors = [] }) => {
+const DonorTable = ({ donors = [], onEdit }) => {
   const [search, setSearch] = useState("");
   const [bloodGroup, setBloodGroup] = useState("All");
-  const [status, setStatus] = useState("All");
 
   const [selectedDonor, setSelectedDonor] = useState(null);
   const [openLabel, setOpenLabel] = useState(false);
@@ -49,33 +43,33 @@ const DonorTable = ({ donors = [] }) => {
   };
 
   const filteredDonors = useMemo(() => {
-    return donors.filter((donor) => {
-      const searchText = search.toLowerCase();
+    const searchText = search.trim().toLowerCase();
 
+    return donors.filter((donor) => {
       const matchesSearch =
-        donor.donorName?.toLowerCase().includes(searchText) ||
-        donor.donorId?.toLowerCase().includes(searchText) ||
-        donor.unitNumber?.toLowerCase().includes(searchText);
+        donor.name?.toLowerCase().includes(searchText) ||
+        donor.donor_code?.toLowerCase().includes(searchText) ||
+        donor.phone_number?.includes(search);
 
       const matchesBloodGroup =
-        bloodGroup === "All" || donor.bloodGroup === bloodGroup;
-
-      const matchesStatus =
-        status === "All" || donor.status === status;
+        bloodGroup === "All" ||
+        donor.blood_group === bloodGroup;
 
       return (
         matchesSearch &&
-        matchesBloodGroup &&
-        matchesStatus
+        matchesBloodGroup
       );
     });
-  }, [donors, search, bloodGroup, status]);
+  }, [donors, search, bloodGroup]);
 
   return (
     <>
       <AppCard>
         <Stack spacing={3}>
-          <Typography variant="h6" fontWeight={600}>
+          <Typography
+            variant="h6"
+            fontWeight={600}
+          >
             Donor List ({filteredDonors.length})
           </Typography>
 
@@ -87,9 +81,11 @@ const DonorTable = ({ donors = [] }) => {
             spacing={2}
           >
             <SearchField
-              placeholder="Search donor, donor ID or unit..."
+              placeholder="Search donor, donor code or mobile..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
             />
 
             <TextField
@@ -115,42 +111,20 @@ const DonorTable = ({ donors = [] }) => {
                 </MenuItem>
               ))}
             </TextField>
-
-            <TextField
-              select
-              size="small"
-              label="Status"
-              value={status}
-              onChange={(e) =>
-                setStatus(e.target.value)
-              }
-              sx={{ minWidth: 180 }}
-            >
-              <MenuItem value="All">
-                All Status
-              </MenuItem>
-
-              {statusOptions.map((item) => (
-                <MenuItem
-                  key={item}
-                  value={item}
-                >
-                  {item}
-                </MenuItem>
-              ))}
-            </TextField>
           </Stack>
 
           <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Donor ID</TableCell>
-                  <TableCell>Unit Number</TableCell>
+                  <TableCell>Donor Code</TableCell>
                   <TableCell>Donor Name</TableCell>
-                  <TableCell>ABO Group</TableCell>
-                  <TableCell>Rh Type</TableCell>
-                  <TableCell>Component</TableCell>
+                  <TableCell>Gender</TableCell>
+                  <TableCell>Age</TableCell>
+                  <TableCell>Blood Group</TableCell>
+                  <TableCell>Donation Type</TableCell>
+                  <TableCell>Mobile Number</TableCell>
+                  <TableCell>Created By</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell align="center">
                     Action
@@ -163,54 +137,89 @@ const DonorTable = ({ donors = [] }) => {
                   filteredDonors.map((donor) => (
                     <TableRow
                       hover
-                      key={donor.donorId}
+                      key={donor.id}
                     >
                       <TableCell>
-                        {donor.donorId}
+                        {donor.donor_code ??
+                          "-"}
                       </TableCell>
 
                       <TableCell>
-                        {donor.unitNumber}
+                        {donor.name}
                       </TableCell>
 
                       <TableCell>
-                        {donor.donorName}
+                        {donor.gender}
                       </TableCell>
 
                       <TableCell>
-                        {donor.bloodGroup}
+                        {donor.age}
                       </TableCell>
 
                       <TableCell>
-                        {donor.rhType === "Positive"
-                          ? "+"
-                          : "-"}
+                        {`${donor.blood_group}${donor.rh_type}`}
                       </TableCell>
 
                       <TableCell>
-                        {donor.component}
+                        {donor.donation_type}
                       </TableCell>
 
                       <TableCell>
-                        {donor.status}
+                        {
+                          donor.phone_number
+                        }
+                      </TableCell>
+
+                      <TableCell>
+                        {donor.created_by_name?.trim() ||
+                          "-"}
+                      </TableCell>
+
+                      <TableCell>
+                        <StatusChip
+                          status={
+                            donor.is_active
+                              ? "Active"
+                              : "Inactive"
+                          }
+                        />
                       </TableCell>
 
                       <TableCell align="center">
-                        <IconButton
-                          color="primary"
-                          onClick={() =>
-                            handleView(donor)
-                          }
+                        <Stack
+                          direction="row"
+                          justifyContent="center"
+                          spacing={0.5}
                         >
-                          <VisibilityOutlinedIcon />
-                        </IconButton>
+                          <IconButton
+                            color="primary"
+                            onClick={() =>
+                              handleView(
+                                donor
+                              )
+                            }
+                          >
+                            <VisibilityOutlinedIcon />
+                          </IconButton>
+
+                          <IconButton
+                            color="secondary"
+                            onClick={() =>
+                              onEdit(
+                                donor.id
+                              )
+                            }
+                          >
+                            <EditOutlinedIcon />
+                          </IconButton>
+                        </Stack>
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
                     <TableCell
-                      colSpan={8}
+                      colSpan={10}
                       align="center"
                     >
                       <Box py={5}>

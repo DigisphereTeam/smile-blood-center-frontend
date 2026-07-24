@@ -4,9 +4,9 @@ import PendingActionsOutlinedIcon from "@mui/icons-material/PendingActionsOutlin
 import BiotechOutlinedIcon from "@mui/icons-material/BiotechOutlined";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 
-import StatCard from "../../../components/common/StatCard";
+import StatCard from "../../../../components/common/StatCard";
 
-import { REQUISITION_STATUS } from "../../../constants/statusConstants";
+import { REQUISITION_STATUS } from "../../../../constants/statusConstants";
 
 const LabStats = ({ patients = [] }) => {
   const totalQueue = patients.filter(

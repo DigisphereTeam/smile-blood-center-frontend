@@ -6,10 +6,10 @@ import PageHeader from "../../../components/common/PageHeader";
 import AppCard from "../../../components/common/AppCard";
 import EmptyState from "../../../components/common/EmptyState";
 
-import LabStats from "../components/LabStats";
-import PatientQueue from "../components/PatientQueue";
-import PatientSummaryCard from "../components/PatientSummaryCard";
-import LabProcessingCard from "../components/LabProcessingCard";
+import LabStats from "../components/lab-processing/LabStats";
+import PatientQueue from "../components/lab-processing/PatientQueue";
+import PatientSummaryCard from "../components/lab-processing/PatientSummaryCard";
+import LabProcessingCard from "../components/lab-processing/LabProcessingCard";
 
 import {
   getPatients,

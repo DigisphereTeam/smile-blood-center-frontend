@@ -6,9 +6,9 @@ import {
   Chip,
 } from "@mui/material";
 
-import AppCard from "../../../components/common/AppCard";
-import StatusChip from "../../../components/common/StatusChip";
-import BloodGroupCard from "../../../components/common/BloodGroupCard";
+import AppCard from "../../../../components/common/AppCard";
+import StatusChip from "../../../../components/common/StatusChip";
+import BloodGroupCard from "../../../../components/common/BloodGroupCard";
 
 const formatComponent = (component) => {
   if (!component) return "-";
@@ -80,7 +80,7 @@ const PatientSummaryCard = ({ patient }) => {
             <Label>PATIENT BLOOD GROUP</Label>
 
             <Box mt={2}>
-              <BloodGroupCard bloodGroup={patient.bloodGroup} size={80} />
+              <BloodGroupCard bloodGroup={patient.bloodGroup} size={100} />
             </Box>
           </Grid>
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken, clearAuth } from "../features/auth/utils/authStorage"
+import { getToken, clearAuth } from "../features/auth/utils/authStorage";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -27,10 +27,12 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Session expired or unauthorized
-      clearAuth();
+    // Check if the failed request was sent to the login endpoint
+    const isLoginEndpoint = error.config?.url?.includes("/login");
 
+    // Only force redirect if it's a 401 AND NOT a login attempt
+    if (error.response?.status === 401 && !isLoginEndpoint) {
+      clearAuth();
       window.location.href = "/login";
     }
 

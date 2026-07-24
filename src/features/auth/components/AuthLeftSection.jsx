@@ -25,8 +25,8 @@ const AuthLeftSection = () => {
         alt="Blood Centre"
         sx={{
           width: {
-            md: 180,
-            lg: 220,
+            md: 220,
+            lg: 300,
           },
           mb: 5,
         }}

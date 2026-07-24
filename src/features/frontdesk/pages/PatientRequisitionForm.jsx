@@ -16,9 +16,12 @@ import EmergencyDetails from "../components/patient-requisition/EmergencyDetails
 import { patientRequisitionSchema } from "../schemas/patientRequisition.schema";
 import { bloodComponents } from "../../../constants/frontdeskMockData";
 import { useCreatePatientRequisition } from "../hooks/useCreatePatientRequisition";
+import LoadingIndicator from "../../../components/common/LoadingIndicator";
+import { useState } from "react";
 
 const PatientRequisitionForm = () => {
   const navigate = useNavigate();
+  const [loading,setLoading] = useState(false)
 
   const { mutateAsync: createPatientRequisition, isPending } =
     useCreatePatientRequisition();
@@ -73,13 +76,17 @@ const PatientRequisitionForm = () => {
 
       toast.success("Patient Requisition Created Successfully");
 
-      navigate("/frontdesk/patient-requisition");
+      navigate("/patient-requisition");
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Failed to create requisition."
       );
     }
   };
+
+  if (loading) {
+    return <><LoadingIndicator/></>;
+  }
 
   return (
     <Box>
