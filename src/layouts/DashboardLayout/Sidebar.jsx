@@ -5,7 +5,7 @@ import Navigation from "./Navigation";
 import useAuth from "../../features/auth/hooks/useAuth";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
-const SIDEBAR_WIDTH = 240;
+const SIDEBAR_WIDTH = 250;
 
 const Sidebar = () => {
   const { user } = useAuth();

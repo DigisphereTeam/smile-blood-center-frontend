@@ -37,7 +37,7 @@ const DonorStats = ({ donors = [] }) => {
   ];
 
   return (
-    <Grid container spacing={2} mb={2}>
+    <Grid container spacing={2} sx={{mb:2}}>
       {stats.map((stat) => (
         <Grid
           key={stat.title}

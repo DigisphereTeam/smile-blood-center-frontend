@@ -4,6 +4,7 @@ import PageHeader from "../../../components/common/PageHeader"
 import DonorStats from "../components/donor/DonorStats"
 import { useDonors } from "../api/donorApi"
 import DonorTable from "../components/donor/DonorTable"
+import LoadingIndicator from "../../../components/common/LoadingIndicator"
 
 const DonorRegistrationPage = () => {
   const navigate = useNavigate()
@@ -21,7 +22,7 @@ const DonorRegistrationPage = () => {
   }
 
   if(isLoading){
-    return <div>...Loading</div>
+    return <div><LoadingIndicator/></div>
   }
 
   if(isError){
