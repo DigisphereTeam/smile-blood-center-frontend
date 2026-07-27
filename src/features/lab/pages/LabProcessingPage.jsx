@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Grid, Stack } from "@mui/material";
 import ScienceOutlinedIcon from "@mui/icons-material/ScienceOutlined";
 
@@ -11,42 +11,25 @@ import PatientQueue from "../components/lab-processing/PatientQueue";
 import PatientSummaryCard from "../components/lab-processing/PatientSummaryCard";
 import LabProcessingCard from "../components/lab-processing/LabProcessingCard";
 
-import {
-  getPatients,
-  updatePatient,
-} from "../../storage/requisitionStorageApi";
 import { REQUISITION_STATUS } from "../../../constants/statusConstants";
+import { usePatientRequisitions } from "../../frontdesk/hooks/usePatientRequisitions";
+import LoadingIndicator from "../../../components/common/LoadingIndicator";
 
 const LabProcessingPage = () => {
-  const [patients, setPatients] = useState([]);
+  const { data: patients = [], isLoading } = usePatientRequisitions();
   const [selectedPatient, setSelectedPatient] = useState(null);
 
-  useEffect(() => {
-    setPatients(getPatients());
-  }, []);
-
   const handleLabSubmit = (updatedPatient) => {
-  updatePatient(updatedPatient);
-
-  const refreshedPatients = getPatients();
-
-  setPatients(refreshedPatients);
-
-  // If completed, clear the selection
-  if (updatedPatient.status === REQUISITION_STATUS.COMPLETED) {
-    setSelectedPatient(null);
-    return;
-  }
-
-  const latestPatient = refreshedPatients.find(
-    (patient) => patient.id === updatedPatient.id
-  );
-
-  setSelectedPatient(latestPatient);
+  setSelectedPatient(updatedPatient);
 };
+
   const queuePatients = patients.filter(
     (patient) => patient.status !== REQUISITION_STATUS.COMPLETED,
   );
+
+  if (isLoading) {
+  return <div><LoadingIndicator/></div>;
+}
 
   return (
     <>

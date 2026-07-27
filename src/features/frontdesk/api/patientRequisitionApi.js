@@ -22,7 +22,7 @@ const mapPatientRequisition = (item) => ({
   patientName: item.patient_name,
   hospital: item.hospital_name,
 
-  // Keep these separate for View/Edit pages
+  // These are separate for View/Edit pages
   bloodGroup: item.blood_group,
   rhType: item.rh_type,
 

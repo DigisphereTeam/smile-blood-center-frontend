@@ -31,6 +31,7 @@ const PatientRequisitionEdit = () => {
 
   const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(patientRequisitionSchema),
+    mode: "onBlur",
 
     defaultValues: {
       patientName: "",

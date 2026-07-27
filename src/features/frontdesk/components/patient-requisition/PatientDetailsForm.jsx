@@ -61,6 +61,7 @@ const PatientDetailsForm = ({
             type="number"
             required
             disabled={disabled}
+            inputProps={{min : 0}}
           />
         </Grid>
 

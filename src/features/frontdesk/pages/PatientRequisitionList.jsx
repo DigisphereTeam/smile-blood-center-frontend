@@ -6,8 +6,9 @@ import PageHeader from "../../../components/common/PageHeader";
 import AppButton from "../../../components/common/AppButton";
 import PatientRequisitionTable from "../components/patient-requisition/PatientRequisitionTable";
 
-import { getPatientRequisitions } from "../api/patientRequisitionApi";
+
 import LoadingIndicator from "../../../components/common/LoadingIndicator";
+import { usePatientRequisitions } from "../hooks/usePatientRequisitions";
 
 const PatientRequisitionList = () => {
   const navigate = useNavigate();
@@ -16,10 +17,7 @@ const PatientRequisitionList = () => {
     data: patients = [],
     isLoading,
     isError,
-  } = useQuery({
-    queryKey: ["patient-requisitions"],
-    queryFn: getPatientRequisitions,
-  });
+  } = usePatientRequisitions()
 
   const handleCreate = () => {
     navigate("/patient-requisition/create");

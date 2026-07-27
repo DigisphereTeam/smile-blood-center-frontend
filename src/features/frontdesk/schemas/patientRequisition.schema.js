@@ -8,10 +8,13 @@ export const patientRequisitionSchema = z
 
     bloodGroup: z.string().min(1, "Blood group is required"),
 
-    age: z.coerce
-      .number()
+    age: z
+      .string()
       .min(1, "Age is required")
-      .max(150, "Invalid age"),
+      .transform((val) => Number(val))
+      .refine((val) => !Number.isNaN(val), "Age must be a number")
+      .refine((val) => val >= 0, "Age cannot be negative")
+      .refine((val) => val <= 150, "Invalid age"),
 
     diagnosis: z.string().min(1, "Diagnosis is required"),
 
@@ -50,13 +53,13 @@ export const patientRequisitionSchema = z
 
         units: z.preprocess(
           (value) => (value === "" ? null : Number(value)),
-          z.number().nullable()
+          z.number().nullable(),
         ),
 
         requiredDateTime: z.any().nullable(),
 
         reserve: z.boolean(),
-      })
+      }),
     ),
 
     isEmergency: z.boolean(),
@@ -107,11 +110,17 @@ export const patientRequisitionSchema = z
     data.bloodComponents.forEach((component, index) => {
       if (!component.selected) return;
 
-      if (!component.units || component.units <= 0) {
+      if (component.units === null || component.units === undefined) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ["bloodComponents", index, "units"],
           message: "Units are required.",
+        });
+      } else if (component.units <= 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["bloodComponents", index, "units"],
+          message: "Units must be greater than 0.",
         });
       }
 
