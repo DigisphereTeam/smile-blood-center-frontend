@@ -101,9 +101,9 @@ const PatientQueueCard = ({
               color="error.main"
             >
               {patient.bloodGroup}
-              {/* {patient.rhType === "Positive"
+              {patient.rhType === "Positive"
                 ? "+"
-                : "-"} */}
+                : "-"}
             </Typography>
           </Stack>
 

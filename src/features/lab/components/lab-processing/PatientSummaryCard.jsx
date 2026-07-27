@@ -80,7 +80,7 @@ const PatientSummaryCard = ({ patient }) => {
             <Label>PATIENT BLOOD GROUP</Label>
 
             <Box mt={2}>
-              <BloodGroupCard bloodGroup={patient.bloodGroup} size={100} />
+              <BloodGroupCard bloodGroup={patient.bloodGroup} rhType={patient.rhType} size={100} />
             </Box>
           </Grid>
 
