@@ -31,7 +31,7 @@ const BloodGroupingForm = ({
           fontWeight={700}
         >
           {patient?.bloodGroup}
-          {/* {patient?.rhType === "Positive" ? "+" : "-"} */}
+          {patient?.rhType === "Positive" ? "+" : "-"}
         </Typography>
       </Stack>
 

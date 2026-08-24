@@ -150,7 +150,6 @@ const PatientRequisitionEdit = () => {
   if (isLoading) {
     return (
       <Box
-        
       >
         <LoadingIndicator/>
       </Box>
