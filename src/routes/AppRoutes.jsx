@@ -93,12 +93,6 @@ const AppRoutes = () => {
               element={<CompatibilityReportPage />}
             />
 
-            {/*
-            <Route
-              path="/compatibility-report"
-              element={<CompatibilityReportPage />}
-            />
-            */}
           </Route>
         </Route>
       </Route>
